@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from "./shared/login.service";
 import { RegistrationService } from "./shared/registration.service";
 import { VerificationComponent } from './verification/verification.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { VerificationComponent } from './verification/verification.component';
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    VerificationComponent
+    VerificationComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

@@ -52,11 +52,14 @@ app.post("/adduser", (req, res) => {
 
   userObj.save((err) => {
     if (err) {
-      return res.send("error");
+      return res.send({
+        message: "Registration unsuccessful.. try again !",
+        success: false,
+      });
     } else {
       // compose mail
       const html = `
-        Hi there, 
+        Hi there,
         <br/>
         Thank you for registering!
         <br/>
@@ -76,7 +79,10 @@ app.post("/adduser", (req, res) => {
       mailer.sendEmail("admin@cowork.com", email, "Verification mail", html);
     }
 
-    return res.json("registration successfull");
+    return res.json({
+      message: "Registration successful... Verify your mail !",
+      success: true,
+    });
   });
 });
 
@@ -85,22 +91,31 @@ app.post("/login", (req, res) => {
 
   User.findOne({ email: email }, async (err, user) => {
     if (err) {
-      return res.json("error : user not found.");
+      return res.json({
+        message: "Invalid user's credentials",
+        success: false,
+      });
     }
 
     if (user) {
       if (!user.active) {
-        return res.json("Please verify email ...");
+        return res.json({
+          message: "Please verify your email first...!",
+          success: false,
+        });
       } else {
         const match = await bcrypt.compare(password, user.password);
         if (match) {
-          return res.json(user);
+          return res.json({ message: "User logged in !", success: true });
         } else {
-          return res.json("invalid user credentials");
+          return res.json({
+            message: "Invalid user's credentials",
+            success: false,
+          });
         }
       }
     }
-    return res.json("Invalid credentials");
+    return res.json({ message: "Invalid user's credentials", success: false });
   });
 });
 
@@ -115,9 +130,12 @@ app.post("/verify", (req, res) => {
         result.save((error) => {
           if (error) {
             console.log(error);
-            return res.json("not updated");
+            return res.json({
+              message: "Email verification failed.!",
+              success: false,
+            });
           }
-          return res.json(result);
+          return res.json({ message: "Email verified..", success: true });
         });
       }
     });

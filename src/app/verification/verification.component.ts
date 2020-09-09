@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../shared/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verification',
@@ -8,14 +9,26 @@ import { LoginService } from '../shared/login.service';
 })
 export class VerificationComponent implements OnInit {
 
-  constructor(private loginService: LoginService) { }
+  msg: string;
+  isVerified: boolean;
+
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   verifymail(value) {
     this.loginService.verifyToken({ token: value.tk }).subscribe((result) => {
-      console.log(result);
-    })
+      if (result.success) {
+        setTimeout(() => {
+          this.router.navigate(['login']);
+        }, 1500
+        );
+
+      }
+      this.isVerified = result.success;
+      this.msg = result.message;
+    });
+
   }
 }

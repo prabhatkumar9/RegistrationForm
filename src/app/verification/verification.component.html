@@ -1,9 +1,20 @@
 <div>
-  <form #token="ngForm" (ngSubmit)="verifymail(token.value)">
-    <h1>Please enter text and verify</h1>
-    <br />
-    <input type="text" name="tk" #tk="ngModel" [ngModel] />
-    <br />
-    <button type="submit">Verify</button>
-  </form>
+  <h1>Verify Email</h1>
+  <hr />
+  <br />
+  <div class="col-md-10">
+    <form #token="ngForm" (ngSubmit)="verifymail(token.value)">
+      <div class="form-gruop">
+        <label for="token"> Enter Token :</label> <br />
+        <input type="text" name="tk" #tk="ngModel" [ngModel] required />
+      </div>
+      <br />
+      <div *ngIf="isVerified">
+        <h5>{{msg}}</h5>
+      </div>
+      <button [disabled]="!token.valid" class="btn btn-primary" type="submit">
+        Verify
+      </button>
+    </form>
+  </div>
 </div>

@@ -1,0 +1,6 @@
+li > a.active {
+  color: #f97924;
+}
+.nav.navbar-nav {
+  font-size: 15px;
+}

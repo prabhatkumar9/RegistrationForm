@@ -13,7 +13,9 @@ export class RegisterComponent implements OnInit {
   // model class object
   register = new Register();
 
-  isInvalidRegister: boolean;
+  msg: string;
+
+  isregistered: boolean;
 
   //pattern
   emailPattern = '^[a-z0-9,_%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
@@ -24,19 +26,27 @@ export class RegisterComponent implements OnInit {
     private router: Router
   ) { }
 
-  // custom validator for confirm password
 
   ngOnInit(): void {
     this.resetForm();
   }
 
-  // new user
+
   addNewUser() {
     this.registerService.RegisterNewUser(this.register).subscribe((result) => {
-      console.log(result)
+      if (result.success) {
+        this.msg = result.message;
+        setTimeout(() => {
+          this.router.navigate(['verify']);
+        }, 1500
+        );
+      } else {
+        this.msg = result.message;
+      }
+
+      this.isregistered = result.success;
     });
 
-    this.router.navigate(['login']);
     this.resetForm();
   }
 

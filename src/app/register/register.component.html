@@ -1,11 +1,16 @@
 <div class="container">
-  <div class="segment">
-    <h3 [routerLink]="['/login']">Login</h3>
-  </div>
-
-  <form #userRegister="ngForm" (ngSubmit)="addNewUser()">
-    <div class="row">
-      <label for="username" class="label">
+  <h1>Register</h1>
+  <hr />
+  <div class="col-md-8">
+    <form #userRegister="ngForm" (ngSubmit)="addNewUser()">
+      <div class="form-group">
+        <div *ngIf="username.errors && (username.invalid && username.touched)">
+          <em *ngIf="username.errors.required">Username is required</em>
+          <em *ngIf="username.errors.minlength"
+            >Username must contain minimum 3 characters</em
+          >
+        </div>
+        <label for="username" class="label"> Username :</label> <br />
         <input
           type="text"
           name="username"
@@ -15,20 +20,14 @@
           required
           minlength="3"
         />
-        <div
-          class="red-text"
-          *ngIf="username.errors && (username.invalid && username.touched)"
-        >
-          <small *ngIf="username.errors.required">Username is required</small>
-          <small *ngIf="username.errors.minlength"
-            >Username must contain minimum 3 characters</small
-          >
-        </div>
-      </label>
-    </div>
+      </div>
 
-    <div class="row">
-      <label for="email" class="label">
+      <div class="form-group">
+        <div *ngIf="email.errors && (email.invalid && email.touched)">
+          <em *ngIf="email.errors.required">Email is required</em>
+          <em *ngIf="email.errors.pattern">Enter valid email id</em>
+        </div>
+        <label for="email" class="label">Email : </label> <br />
         <input
           type="text"
           placeholder="Email Address"
@@ -39,18 +38,20 @@
           [pattern]="emailPattern"
           required
         />
-        <div
-          class="red-text"
-          *ngIf="email.errors && (email.invalid && email.touched)"
-        >
-          <small *ngIf="email.errors.required">Email is required</small>
-          <small *ngIf="email.errors.pattern">Enter valid email id</small>
-        </div>
-      </label>
-    </div>
+      </div>
 
-    <div class="row">
-      <label for="password" class="label">
+      <div class="form-group">
+        <div *ngIf="password.errors && (password.invalid && password.touched)">
+          <em *ngIf="password.errors.required">Password is required</em>
+          <em *ngIf="password.errors.minlength"
+            >Password is minimum 8 characters long
+          </em>
+          <em *ngIf="password.errors.pattern"
+            >Password must include at least an uppercase, a number & a special
+            character.</em
+          >
+        </div>
+        <label for="password" class="label"> Password :</label> <br />
         <input
           type="password"
           placeholder="Password"
@@ -61,23 +62,20 @@
           [pattern]="passwordPattern"
           minlength="8"
         />
+      </div>
+      <div class="form-group">
         <div
-          class="red-text"
-          *ngIf="password.errors && (password.invalid && password.touched)"
+          *ngIf="confirmPassword.errors && (confirmPassword.invalid && confirmPassword.touched)"
         >
-          <small *ngIf="password.errors.required">Password is required</small>
-          <small *ngIf="password.errors.minlength"
-            >Password is minimum 8 characters long
-          </small>
-          <small *ngIf="password.errors.pattern"
-            >Password must include at least an uppercase, a number & a special
-            character.</small
+          <em *ngIf="confirmPassword.errors.required"
+            >Confirm Password is required</em
+          >
+          <em *ngIf="confirmPassword.errors.pattern"
+            >Confirm password and password must match</em
           >
         </div>
-      </label>
-    </div>
-    <div class="row">
-      <label for="confirmPassword" class="label">
+        <label for="confirmPassword" class="label"> Confrim Password :</label>
+        <br />
         <input
           type="password"
           placeholder="confirm Password"
@@ -85,56 +83,48 @@
           [ngModel]
           #confirmPassword="ngModel"
           required
-          minlength="6"
+          minlength="8"
           pattern="{{ password.value }}"
         />
-        <div
-          class="red-text"
-          *ngIf="confirmPassword.errors && (confirmPassword.invalid && confirmPassword.touched)"
-        >
-          <small *ngIf="confirmPassword.errors.required"
-            >Confirm Password is required</small
-          >
-          <small *ngIf="confirmPassword.errors.pattern"
-            >Confirm password and password must match</small
-          >
-        </div>
-      </label>
-    </div>
+      </div>
 
-    <div class="row">
-      <label for="contact" class="label">
+      <div class="form-group">
+        <div *ngIf="mobile.errors && (mobile.invalid && mobile.touched)">
+          <em *ngIf="mobile.errors.required">Mobile Number is required</em>
+          <em *ngIf="mobile.errors.minlength"
+            >Mobile Number has 10 digits min.</em
+          >
+          <em *ngIf="mobile.errors.maxlength"
+            >Mobile Number has 10 digits max.
+          </em>
+        </div>
+        <label for="mobile" class="label"> Mobile : </label> <br />
         <input
           type="text"
-          name="contact"
-          #contact="ngModel"
-          placeholder="Contact Number"
+          name="mobile"
+          #mobile="ngModel"
+          placeholder="Mobile Number"
           [(ngModel)]="register.mobile"
           required
           minlength="10"
           maxlength="10"
         />
-        <div
-          class="red-text"
-          *ngIf="contact.errors && (contact.invalid && contact.touched)"
-        >
-          <small *ngIf="contact.errors.required"
-            >Contact Number is required</small
-          >
-          <small *ngIf="contact.errors.minlength"
-            >Mobile Number has 10 digits min.</small
-          >
-          <small *ngIf="contact.errors.maxlength"
-            >Mobile Number has 10 digits max.
-          </small>
-        </div>
-      </label>
-    </div>
+      </div>
 
-    <br />
-    <button [disabled]="!userRegister.valid" class="btn" type="submit">
-      <i class="fa fa-unlock-alt"> Sign Up </i>
-    </button>
-    <button class="btn" type="reset" (click)="resetForm()">Reset</button>
-  </form>
+      <br />
+      <div *ngIf="isregistered">
+        <h5>{{msg}}</h5>
+      </div>
+      <button
+        [disabled]="!userRegister.valid"
+        class="btn btn-primary"
+        type="submit"
+      >
+        Sign Up
+      </button>
+      <button class="btn btn-primary" type="reset" (click)="resetForm()">
+        Reset
+      </button>
+    </form>
+  </div>
 </div>
