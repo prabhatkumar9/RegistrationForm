@@ -1,0 +1,64 @@
+<div class="segment">
+  <h3 [routerLink]="['/register']">Register</h3>
+</div>
+
+<form #loginForm="ngForm" (ngSubmit)="login()">
+  <div>
+    <div
+      class="red-text"
+      *ngIf="email.errors && (email.invalid && email.touched)"
+    >
+      <em *ngIf="email.errors.required">Email is required</em>
+      <em *ngIf="email.errors.pattern">Enter valid email id</em>
+    </div>
+
+    <label for="email" class="label">
+      Email :
+      <input
+        type="text"
+        placeholder="Email Address"
+        name="email"
+        [(ngModel)]="userlogin.email"
+        #email="ngModel"
+        class="validate"
+        [pattern]="emailPattern"
+        required
+      />
+    </label>
+  </div>
+
+  <div>
+    <div
+      class="red-text"
+      *ngIf="password.errors && password.invalid && password.touched"
+    >
+      <em *ngIf="password.errors.required">Password is required</em>
+      <em *ngIf="password.errors.minlength"
+        >Password is minimum 6 characters long.
+      </em>
+    </div>
+
+    <label for="password" class="label">
+      Password :
+      <input
+        type="password"
+        placeholder="Password"
+        name="password"
+        [(ngModel)]="userlogin.password"
+        #password="ngModel"
+        class="validate"
+        required
+        minlength="6"
+      />
+    </label>
+  </div>
+
+  <div class="segment">
+    <button class="btn" type="submit" [disabled]="!loginForm.valid">
+      <i class="fa fa-unlock-alt"> Log In </i>
+    </button>
+  </div>
+  <div class="segment">
+    <button type="button" class="btn red">Forgot Password</button>
+  </div>
+</form>

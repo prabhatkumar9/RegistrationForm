@@ -1,0 +1,9 @@
+<div>
+  <form #token="ngForm" (ngSubmit)="verifymail(token.value)">
+    <h1>Please enter text and verify</h1>
+    <br />
+    <input type="text" name="tk" #tk="ngModel" [ngModel] />
+    <br />
+    <button type="submit">Verify</button>
+  </form>
+</div>
