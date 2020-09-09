@@ -76,7 +76,7 @@ app.post("/adduser", (req, res) => {
       mailer.sendEmail("admin@cowork.com", email, "Verification mail", html);
     }
 
-    res.json(userObj);
+    return res.json("registration successfull");
   });
 });
 
@@ -85,21 +85,22 @@ app.post("/login", (req, res) => {
 
   User.findOne({ email: email }, async (err, user) => {
     if (err) {
-      return res.send("error");
+      return res.json("error : user not found.");
     }
 
     if (user) {
       if (!user.active) {
-        return res.send(user);
-      }
-      const match = await bcrypt.compare(password, user.password);
-      if (match) {
-        return res.send(user);
+        return res.json("Please verify email ...");
       } else {
-        return res.send("invalid user");
+        const match = await bcrypt.compare(password, user.password);
+        if (match) {
+          return res.json(user);
+        } else {
+          return res.json("invalid user credentials");
+        }
       }
     }
-    return res.send("Invalid credentials");
+    return res.json("Invalid credentials");
   });
 });
 
@@ -114,9 +115,9 @@ app.post("/verify", (req, res) => {
         result.save((error) => {
           if (error) {
             console.log(error);
-            return res.send("not updated");
+            return res.json("not updated");
           }
-          return res.send(result);
+          return res.json(result);
         });
       }
     });
