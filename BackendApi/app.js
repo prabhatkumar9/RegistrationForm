@@ -34,11 +34,11 @@ conn.on("error", (err) => {
 ///
 
 //// api call functions
-app.post("/adduser", (req, res) => {
+app.post("/adduser", async (req, res) => {
   const { username, email, password, mobile } = req.body;
   const hash = bcrypt.hashSync(password, saltRounds);
   // generate screte token
-  const secreteToken = randomstring.generate();
+  const secreteToken = await randomstring.generate();
   // account flag default set active as false
   const isActive = false;
   var userObj = new User({
@@ -50,7 +50,7 @@ app.post("/adduser", (req, res) => {
     active: isActive,
   });
 
-  userObj.save((err) => {
+  await userObj.save((err) => {
     if (err) {
       return res.send({
         message: "Registration unsuccessful.. try again !",
@@ -86,10 +86,10 @@ app.post("/adduser", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  User.findOne({ email: email }, async (err, user) => {
+  await User.findOne({ email: email }, async (err, user) => {
     if (err) {
       return res.json({
         message: "Invalid user's credentials",
@@ -119,10 +119,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/verify", (req, res) => {
+app.post("/verify", async (req, res) => {
   try {
     const token = req.body.token;
-    User.findOne({ secreteToken: token }, (err, result) => {
+    await User.findOne({ secreteToken: token }, (err, result) => {
       if (result) {
         result.active = true;
         result.secreteToken = "";
