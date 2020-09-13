@@ -1,23 +1,29 @@
 // imports
-var express = require("express");
-var app = express();
-var cors = require("cors");
-var mongoose = require("mongoose");
-var bodyparser = require("body-parser");
-var bcrypt = require("bcrypt");
-var User = require("./user-model");
-var randomstring = require("randomstring");
-var port = 3000;
+const express = require("express");
+const app = express();
+const http = require("http");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
+const bcrypt = require("bcrypt");
+const randomstring = require("randomstring");
+const port = 3000;
+
+const server = http.createServer(app);
+const io = require("socket.io").listen(server);
 
 const mailer = require("./mailer");
+const User = require("./user-model");
 
 // variables
 const saltRounds = 10;
 
+// middleware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cors());
 
+// db connection
 mongoose.connect("mongodb://localhost:27017/registrationForm", {
   useNewUrlParser: true,
 });
@@ -30,7 +36,6 @@ conn.on("connected", () => {
 conn.on("error", (err) => {
   if (err) console.log(err);
 });
-
 ///
 
 //// api call functions
@@ -106,6 +111,10 @@ app.post("/login", async (req, res) => {
       } else {
         const match = await bcrypt.compare(password, user.password);
         if (match) {
+          io.on("connection", (socket) => {
+            console.log("socket connection established.");
+            socket.on("clientMessage", (data) => {});
+          });
           return res.json({ message: "User logged in !", success: true });
         } else {
           return res.json({
@@ -144,6 +153,6 @@ app.post("/verify", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("Server started running on port :" + port);
 });

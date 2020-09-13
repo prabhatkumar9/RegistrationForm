@@ -28,6 +28,8 @@ export class LoginComponent implements OnInit {
     this.loginService.LoginUser(this.userlogin).subscribe((result) => {
       console.log(result);
     });
+
+    this.loginService.joinSocket();
   }
 
 }
