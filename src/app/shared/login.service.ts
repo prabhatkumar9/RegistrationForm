@@ -10,17 +10,20 @@ import * as io from 'socket.io-client';
   providedIn: 'root',
 })
 export class LoginService {
-  private socket = io('http://localhost:3000');
+
+  apiURL = 'http://localhost:5000';
+
+  private socket = io(this.apiURL);
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
   LoginUser(user: Login): Observable<any> {
     return this.httpClient
-      .post<any>('http://localhost:3000/login', user);
+      .post<any>(this.apiURL + '/login', user);
   }
 
   verifyToken(token: any): Observable<any> {
-    return this.httpClient.post<any>('http://localhost:3000/verify', token);
+    return this.httpClient.post<any>(this.apiURL + '/verify', token);
   }
 
   joinSocket() {

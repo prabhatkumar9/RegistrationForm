@@ -13,7 +13,7 @@ export class RegistrationService {
 
   public RegisterNewUser(user: Register): Observable<any> {
     return this.httpClient.post<any>(
-      'http://localhost:3000/adduser',
+      'http://localhost:5000/adduser',
       user
     );
   }

@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
-const port = 3000;
+const port = 5000;
 
 const server = http.createServer(app);
 const io = require("socket.io").listen(server);
@@ -37,6 +37,11 @@ conn.on("error", (err) => {
   if (err) console.log(err);
 });
 ///
+
+app.use(express.static(__dirname + "/RegistrationForm"));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/RegistrationForm/index.html");
+});
 
 //// api call functions
 app.post("/adduser", async (req, res) => {
