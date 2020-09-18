@@ -11,6 +11,7 @@ export class VerificationComponent implements OnInit {
 
   msg: string;
   isVerified: boolean;
+  mouseoverLogin: boolean;
 
   constructor(private loginService: LoginService, private router: Router) { }
 

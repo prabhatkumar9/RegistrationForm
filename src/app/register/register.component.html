@@ -4,10 +4,14 @@
   <div class="col-md-8">
     <form #userRegister="ngForm" (ngSubmit)="addNewUser()">
       <div class="form-group">
-        <div *ngIf="username.errors && (username.invalid && username.touched)">
-          <em *ngIf="username.errors.required">Username is required</em>
+        <div
+          *ngIf="username.errors && (username.invalid && username.touched) || mouseoverLogin"
+        >
+          <em *ngIf="username.errors.required || mouseoverLogin"
+            >Username is required</em
+          >
           <em *ngIf="username.errors.minlength"
-            >Username must contain minimum 3 characters</em
+            >Must contain min 3 characters</em
           >
         </div>
         <label for="username" class="label"> Username :</label> <br />
@@ -23,8 +27,12 @@
       </div>
 
       <div class="form-group">
-        <div *ngIf="email.errors && (email.invalid && email.touched)">
-          <em *ngIf="email.errors.required">Email is required</em>
+        <div
+          *ngIf="email.errors && (email.invalid && email.touched) || mouseoverLogin"
+        >
+          <em *ngIf="email.errors.required || mouseoverLogin"
+            >Email is required</em
+          >
           <em *ngIf="email.errors.pattern">Enter valid email id</em>
         </div>
         <label for="email" class="label">Email : </label> <br />
@@ -41,8 +49,12 @@
       </div>
 
       <div class="form-group">
-        <div *ngIf="password.errors && (password.invalid && password.touched)">
-          <em *ngIf="password.errors.required">Password is required</em>
+        <div
+          *ngIf="password.errors && (password.invalid && password.touched) || mouseoverLogin"
+        >
+          <em *ngIf="password.errors.required || mouseoverLogin"
+            >Password is required</em
+          >
           <em *ngIf="password.errors.minlength"
             >Password is minimum 8 characters long
           </em>
@@ -65,9 +77,9 @@
       </div>
       <div class="form-group">
         <div
-          *ngIf="confirmPassword.errors && (confirmPassword.invalid && confirmPassword.touched)"
+          *ngIf="confirmPassword.errors && (confirmPassword.invalid && confirmPassword.touched) || mouseoverLogin"
         >
-          <em *ngIf="confirmPassword.errors.required"
+          <em *ngIf="confirmPassword.errors.required || mouseoverLogin"
             >Confirm Password is required</em
           >
           <em *ngIf="confirmPassword.errors.pattern"
@@ -89,8 +101,13 @@
       </div>
 
       <div class="form-group">
-        <div *ngIf="mobile.errors && (mobile.invalid && mobile.touched)">
-          <em *ngIf="mobile.errors.required">Mobile Number is required</em>
+        <div
+          class="inFG"
+          *ngIf="mobile.errors && (mobile.invalid && mobile.touched) || mouseoverLogin"
+        >
+          <em *ngIf="mobile.errors.required || mouseoverLogin"
+            >Mobile Number is required</em
+          >
           <em *ngIf="mobile.errors.minlength"
             >Mobile Number has 10 digits min.</em
           >
@@ -98,6 +115,7 @@
             >Mobile Number has 10 digits max.
           </em>
         </div>
+
         <label for="mobile" class="label"> Mobile : </label> <br />
         <input
           type="text"
@@ -115,13 +133,18 @@
       <div *ngIf="isregistered">
         <h5>{{msg}}</h5>
       </div>
-      <button
-        [disabled]="!userRegister.valid"
-        class="btn btn-primary"
-        type="submit"
+      <span
+        (mouseenter)="mouseoverLogin=true"
+        (mouseleave)="mouseoverLogin=false"
       >
-        Sign Up
-      </button>
+        <button
+          [disabled]="!userRegister.valid"
+          class="btn btn-primary"
+          type="submit"
+        >
+          Sign Up
+        </button>
+      </span>
       <button class="btn btn-primary" type="reset" (click)="resetForm()">
         Reset
       </button>

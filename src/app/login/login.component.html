@@ -6,8 +6,12 @@
   <div class="col-md-8">
     <form #loginForm="ngForm" (ngSubmit)="login()">
       <div class="form-group">
-        <div *ngIf="email.errors && (email.invalid && email.touched)">
-          <em *ngIf="email.errors.required">Email is required</em>
+        <div
+          *ngIf="email.errors && (email.invalid && email.touched) || mouseoverLogin"
+        >
+          <em *ngIf="email.errors.required || mouseoverLogin"
+            >Email is required</em
+          >
           <em *ngIf="email.errors.pattern">Enter valid email id</em>
         </div>
         <label for="email"> Email :</label> <br />
@@ -24,8 +28,12 @@
       </div>
 
       <div class="form-group">
-        <div *ngIf="password.errors && password.invalid && password.touched">
-          <em *ngIf="password.errors.required">Password is required</em>
+        <div
+          *ngIf="password.errors && (password.invalid && password.touched) || mouseoverLogin"
+        >
+          <em *ngIf="password.errors.required || mouseoverLogin"
+            >Password is required</em
+          >
           <em *ngIf="password.errors.minlength"
             >Password is minimum 8 characters long.
           </em>
@@ -43,14 +51,18 @@
           minlength="8"
         />
       </div>
-
-      <button
-        class="btn btn-primary"
-        type="submit"
-        [disabled]="!loginForm.valid"
+      <span
+        (mouseenter)="mouseoverLogin=true"
+        (mouseleave)="mouseoverLogin=false"
       >
-        Log In
-      </button>
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!loginForm.valid"
+        >
+          Log In
+        </button>
+      </span>
     </form>
   </div>
 </div>

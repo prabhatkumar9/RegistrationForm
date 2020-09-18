@@ -4,17 +4,26 @@
   <br />
   <div class="col-md-10">
     <form #token="ngForm" (ngSubmit)="verifymail(token.value)">
-      <div class="form-gruop">
-        <label for="token"> Enter Token :</label> <br />
-        <input type="text" name="tk" #tk="ngModel" [ngModel] required />
+      <div class="form-group">
+        <em
+          *ngIf="(token.controls?.tk?.invalid && token.controls?.tk?.touched) || (token.controls?.tk?.invalid && mouseoverLogin)"
+          >Required</em
+        >
+        <label for="tk"> Enter Token :</label> <br />
+        <input type="text" name="tk" #tk="ngModel" ngModel required />
       </div>
       <br />
-      <div *ngIf="isVerified">
+      <ng-container *ngIf="isVerified">
         <h5>{{msg}}</h5>
-      </div>
-      <button [disabled]="!token.valid" class="btn btn-primary" type="submit">
-        Verify
-      </button>
+      </ng-container>
+      <span
+        (mouseenter)="mouseoverLogin=true"
+        (mouseleave)="mouseoverLogin=false"
+      >
+        <button [disabled]="!token.valid" class="btn btn-primary" type="submit">
+          Verify
+        </button>
+      </span>
     </form>
   </div>
 </div>
