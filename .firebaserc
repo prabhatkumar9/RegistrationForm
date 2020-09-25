@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "registrationform-d775b"
+  },
+  "targets": {
+    "registrationform-d775b": {
+      "hosting": {
+        "RegistrationForm": [
+          "registrationform-d775b"
+        ]
+      }
+    }
+  }
+}

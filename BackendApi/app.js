@@ -8,11 +8,12 @@ const bodyparser = require("body-parser");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 const port = 5000;
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const server = http.createServer(app);
 const io = require("socket.io").listen(server);
 
-const mailer = require("./mailer");
 const User = require("./user-model");
 
 // variables
@@ -26,6 +27,7 @@ app.use(cors());
 // db connection
 mongoose.connect("mongodb://localhost:27017/registrationForm", {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 var conn = mongoose.connection;
 
@@ -45,6 +47,7 @@ app.get("/", (req, res) => {
 
 //// api call functions
 app.post("/adduser", async (req, res) => {
+  let isMailed = false;
   const { username, email, password, mobile } = req.body;
   const hash = bcrypt.hashSync(password, saltRounds);
   // generate screte token
@@ -67,26 +70,15 @@ app.post("/adduser", async (req, res) => {
         success: false,
       });
     } else {
-      // compose mail
-      const html = `
-        Hi there,
-        <br/>
-        Thank you for registering!
-        <br/>
-        <br/>
-        Please verify you email by typing following token:
-        <br/>
-        Token : <b>${secreteToken}</b>
-        <br/>
-        On the following page:
-        <a href="http://localhost:4200/verify>verify</a>
-        <br/>
-        <br/>
-        Have a nice day!
-  `;
+      // SEND MAIL
+      composeAndSendMail(email, secreteToken);
+    }
 
-      //send mail
-      mailer.sendEmail("admin@cowork.com", email, "Verification mail", html);
+    if (!isMailed) {
+      return res.json({
+        message: "Registration unsuccessful! Try Agian",
+        success: false,
+      });
     }
 
     return res.json({
@@ -157,6 +149,39 @@ app.post("/verify", async (req, res) => {
     console.log("error");
   }
 });
+
+//MAIL COMPOSER AND SENDER
+async function composeAndSendMail(receiver, token) {
+  // TRANSPORTER
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.Email,
+      pass: process.env.Password,
+    },
+  });
+
+  //COMPOSE MAIL
+  let mailOptions = {
+    from: "thefullstackdev",
+    to: receiver,
+    subject: "Account verification",
+    html: `Copy the below token string and paste it in verify tab.!
+    <br />
+    ${token}
+    `,
+  };
+
+  //SEND EMAIL FOR VERIFICATION
+  await transporter.sendMail(mailOptions, (err, data) => {
+    if (err) {
+      console.log("error in sending mail..!", err);
+      return false;
+    }
+    console.log("mail successfuly sent..");
+    return true;
+  });
+}
 
 server.listen(port, () => {
   console.log("Server started running on port :" + port);

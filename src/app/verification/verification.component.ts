@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../shared/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-verification',
@@ -13,9 +13,17 @@ export class VerificationComponent implements OnInit {
   isVerified: boolean;
   mouseoverLogin: boolean;
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  token: string;
+  constructor(private loginService: LoginService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    // // this is the way to pass parameters in url
+    // this.activatedRoute.params.forEach((params) => {
+    //   this.token = params['token'];
+    // });
+
+    // console.log(this.token);
   }
 
   verifymail(value) {
