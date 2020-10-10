@@ -41,6 +41,7 @@ conn.on("error", (err) => {
 ///
 
 app.use(express.static(__dirname + "/RegistrationForm"));
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/RegistrationForm/index.html");
 });
@@ -71,7 +72,7 @@ app.post("/adduser", async (req, res) => {
       });
     } else {
       // SEND MAIL
-      composeAndSendMail(email, secreteToken);
+      isMailed = composeAndSendMail(email, secreteToken);
     }
 
     if (!isMailed) {
